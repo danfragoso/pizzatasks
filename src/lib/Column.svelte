@@ -6,6 +6,7 @@
 
   export let column;
   export let tasks;
+  export let projectName = '';
 
   const dispatch = createEventDispatcher();
 
@@ -93,7 +94,7 @@
     on:drop={handleDrop}
   >
     {#each tasks as task}
-      <TaskCard {task} on:updated={onTaskUpdated} />
+      <TaskCard {task} {projectName} on:updated={onTaskUpdated} />
     {/each}
   </div>
 </div>

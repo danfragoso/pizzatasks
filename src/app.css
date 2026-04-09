@@ -313,10 +313,28 @@ body {
   -webkit-overflow-scrolling: touch;
   scrollbar-width: thin;
   scrollbar-color: var(--border) transparent;
+  /* Break out of container padding so columns aren't clipped at screen edges on mobile */
+  padding-inline: 20px;
+  margin-inline: -20px;
 }
 
 .board::-webkit-scrollbar { height: 6px; }
 .board::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
+
+@media (max-width: 639px) {
+  .board {
+    /* Hide scrollbar on mobile — the "weird border" at the bottom of the board */
+    scrollbar-width: none;
+  }
+  .board::-webkit-scrollbar { display: none; }
+}
+
+@media (min-width: 640px) {
+  .board {
+    padding-inline: 0;
+    margin-inline: 0;
+  }
+}
 
 .column {
   min-width: 280px;
@@ -394,11 +412,54 @@ body {
   outline-offset: 2px;
 }
 
+.task-card-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
+  margin-bottom: 4px;
+}
+
 .task-title {
+  flex: 1;
   font-size: 13px;
   font-weight: 600;
-  margin-bottom: 4px;
   line-height: 1.4;
+}
+
+.copy-btn {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 2px 3px;
+  border-radius: var(--radius-sm);
+  color: var(--muted-foreground);
+  transition: opacity 150ms, background 150ms, color 150ms;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  opacity: 0;
+}
+
+.task-card:hover .copy-btn {
+  opacity: 1;
+}
+
+.copy-btn:hover {
+  background: var(--muted);
+  color: var(--foreground);
+}
+
+.copy-btn.copied {
+  color: var(--primary);
+  opacity: 1;
+}
+
+@media (max-width: 639px) {
+  .copy-btn {
+    opacity: 1;
+  }
 }
 
 .task-description {

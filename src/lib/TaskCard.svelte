@@ -4,6 +4,7 @@
   import Modal from './Modal.svelte';
 
   export let task;
+  export let projectName = '';
 
   const dispatch = createEventDispatcher();
 
@@ -12,6 +13,15 @@
   let columns = [];
   let users = [];
   let isDragging = false;
+  let copied = false;
+
+  function copyTask() {
+    const text = `------------------\nProject: ${projectName}\nTitle: ${task.title}\nDescription: ${task.description || ''}`;
+    navigator.clipboard.writeText(text).then(() => {
+      copied = true;
+      setTimeout(() => { copied = false; }, 1500);
+    });
+  }
 
   function handleDragStart(e) {
     isDragging = true;
@@ -92,8 +102,8 @@
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-noninteractive-element-interactions -->
-<div 
-  class="task-card" 
+<div
+  class="task-card"
   class:dragging={isDragging}
   draggable="true"
   role="button"
@@ -103,7 +113,23 @@
   on:click={handleClick}
   on:keydown={(e) => e.key === 'Enter' && handleClick(e)}
 >
-  <h4 class="task-title">{task.title}</h4>
+  <div class="task-card-top">
+    <h4 class="task-title">{task.title}</h4>
+    <button
+      class="copy-btn"
+      class:copied
+      type="button"
+      draggable="false"
+      on:click|stopPropagation={copyTask}
+      title="Copy task"
+    >
+      {#if copied}
+        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      {:else}
+        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg>
+      {/if}
+    </button>
+  </div>
   {#if task.description}
     <p class="task-description">{task.description}</p>
   {/if}

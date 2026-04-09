@@ -231,7 +231,7 @@
 {:else}
   <div class="board">
     {#each columns as column}
-      <Column {column} tasks={tasks.filter(t => t.column_id === column.id)} on:updated={onColumnUpdated} on:taskUpdated={onTaskUpdated} />
+      <Column {column} tasks={tasks.filter(t => t.column_id === column.id)} projectName={project.name} on:updated={onColumnUpdated} on:taskUpdated={onTaskUpdated} />
     {/each}
   </div>
 {/if}
